@@ -14,38 +14,12 @@ The OWASP Top 10 is a standard awareness document for developers and web applic
 Memory corruption:
  Data races are among the most common and hardest to debug types of bugs in concurrent systems. A data race occurs when two goroutines access the same variable concurrently and at least one of the accesses is a write. See the The Go Memory Model for details.
 
-Here is an example of a data race that can lead to crashes and memory corruption:
 
-func main() {
-	c := make(chan bool)
-	m := make(map[string]string)
-	go func() {
-		m["1"] = "a" // First conflicting access.
-		c <- true
-	}()
-	m["2"] = "b" // Second conflicting access.
-	<-c
-	for k, v := range m {
-		fmt.Println(k, v)
-	}
-}
 
 CROSS-SITE SCRIPTING:
 The server() function that handles HTTP GET requests reads the parameter param from the query string and returns it (as is) in the HTTP response. The default Content-Type response header is determined by the http.DetectContentType function which implements the algorithm described by the WhatWG spec.
 
-package main
 
-import "io"
-import "net/http"
-
-func server(w http.ResponseWriter, r *http.Request) {
-    io.WriteString(w, r.URL.Query().Get("param"))
-}
-
-func main() {
-    http.HandleFunc("/", server)
-    http.ListenAndServe(":5000", nil)
-}
 
 By sending a payload with param=hello, the browser developer tool shows that the Content-Type is set to text/plain (which is not harmful and rendered as simple text by the browser).
 
@@ -54,40 +28,6 @@ By sending a request with param=<script>alert(1)</script>, the Content-Type of t
 
 CSRF ATTACK:
 Cross-site request forgery attacks (CSRF or XSRF for short) are used to send malicious requests from an authenticated user to a web application. The attacker can't see the responses to the forged requests, so CSRF attacks focus on state changes, not theft of data.
-
-Here is an example program:
-
-package main
-
-import (
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/cookie"
-	"github.com/gin-gonic/gin"
-	"github.com/utrack/gin-csrf"
-)
-
-func main() {
-	r := gin.Default()
-	store := cookie.NewStore([]byte("secret"))
-	r.Use(sessions.Sessions("mysession", store))
-	r.Use(csrf.Middleware(csrf.Options{
-		Secret: "secret123",
-		ErrorFunc: func(c *gin.Context) {
-			c.String(400, "CSRF token mismatch")
-			c.Abort()
-		},
-	}))
-
-	r.GET("/protected", func(c *gin.Context) {
-		c.String(200, csrf.GetToken(c))
-	})
-
-	r.POST("/protected", func(c *gin.Context) {
-		c.String(200, "CSRF token is valid")
-	})
-
-	r.Run(":8080")
-}
 
 
 
