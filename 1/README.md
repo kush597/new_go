@@ -32,6 +32,8 @@ Second mode is through "go test -fuzz=FuzzTestName" in Command promt
 
 Packages that need to be installed:
 $ go get -d github.com/dvyukov/go-fuzz-corpus or $ go get  github.com/dvyukov/go-fuzz-corpus
-
+$ go get -d github.com/dvyukov/go-fuzz or $ go get  github.com/dvyukov/go-fuzz
+$ go get -d github.com/dvyukov/go-fuzz/go-fuzz or $ go get  github.com/dvyukov/go-fuzz/go-fuzz
+$ go get -d github.com/dvyukov/go-fuzz/go-fuzz-build or $ go get  github.com/dvyukov/go-fuzz/go-fuzz-build
 
 
