@@ -1,0 +1,13 @@
+package main
+
+import "fmt"
+
+func main() {
+    arr := []string{"hello", "world"}
+    fmt.Println(test(arr))
+    fmt.Println(test(nil))
+}
+
+func test(arr []string) string {
+    return arr[0]
+}
